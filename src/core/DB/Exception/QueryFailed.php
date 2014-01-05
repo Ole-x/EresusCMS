@@ -37,26 +37,23 @@
 class Eresus_DB_Exception_QueryFailed extends Eresus_DB_Exception
 {
     /**
-     * Конструктор
+     * Фабрика исключений
      *
-     * @todo Заменить фабричным методом
+     * @param ezcQuery|string $query     неудавшийся запрос
+     * @param PDOException    $previous  предыдущее исключение
      *
-     * @param ezcQuery  $query     неудавшийся запрос
-     * @param string    $message   сообщение
-     * @param Exception $previous  предыдущее исключение
+     * @return Eresus_DB_Exception_QueryFailed
      */
-    public function __construct(ezcQuery $query = null, $message = null, Exception $previous = null)
+    public static function create($query, PDOException $previous = null)
     {
-        $insider = new DBQueryInsider;
-        $query->doBind($insider);
-        $query = $insider->subst($query);
-
-        if (is_null($message))
+        if ($query instanceof ezcQuery)
         {
-            $message = 'Database query failed';
+            $insider = new DBQueryInsider;
+            $query->doBind($insider);
+            $query = $insider->subst($query);
         }
-
-        parent::__construct($message . ': ' . $query, 0, $previous);
+        return new self(sprintf('Database query "%s" failed: %s', $query, $previous->getMessage()),
+            0, $previous);
     }
 }
 

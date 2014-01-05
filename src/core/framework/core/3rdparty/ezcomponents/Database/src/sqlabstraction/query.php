@@ -555,9 +555,9 @@ abstract class ezcQuery
             $stmt->execute();
 
         }
-        catch (Exception $e)
+        catch (PDOException $e)
         {
-            throw new Eresus_DB_Exception_QueryFailed($this, null, $e);
+            throw Eresus_DB_Exception_QueryFailed::create($this, $e);
         }
 
         return $stmt;
