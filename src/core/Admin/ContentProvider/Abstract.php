@@ -68,7 +68,7 @@ abstract class Eresus_Admin_ContentProvider_Abstract
         {
             throw new RuntimeException(
                 sprintf(_('В модуле %s произошла ошибка: %s'), $this->getModuleName(),
-                    $e->getMessage(), 0, $e));
+                    $e->getMessage()), 0, $e);
         }
         return $html;
     }
@@ -99,7 +99,7 @@ abstract class Eresus_Admin_ContentProvider_Abstract
         {
             throw new RuntimeException(
                 sprintf(_('В модуле %s произошла ошибка: %s'), $this->getModuleName(),
-                    $e->getMessage(), 0, $e));
+                    $e->getMessage()), 0, $e);
         }
         return $html;
     }
