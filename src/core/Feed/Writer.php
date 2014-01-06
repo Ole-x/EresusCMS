@@ -496,9 +496,9 @@ class Eresus_Feed_Writer
 	 * A "]]>" respectively "<![CDATA" in the data would break the CDATA in the
 	 * XML, so the brackets are converted to a HTML entity.
 	 *
-	 * @access   private
-	 * @param    string  Data to be sanitized
-	 * @return   string  Sanitized data
+	 * @param string $text  Data to be sanitized
+	 *
+     * @return string  Sanitized data
 	 */
 	private function sanitizeCDATA($text)
 	{
