@@ -10,4 +10,5 @@
    structure/index
    guide/index
    debug
+   internals/index
    appendix/index
