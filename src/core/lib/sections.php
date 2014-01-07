@@ -373,42 +373,33 @@ class Sections
     /**
      * Удаляет раздел и подразделы
      *
-     * @param  int  $id  Идентификатор раздела
+     * @param int $id  Идентификатор раздела
      *
-     * @return  bool  Результат операции
+     * @return bool  Результат операции
      */
     public function delete($id)
     {
-        $result = true;
         $children = $this->children($id);
         /* Удаляем подразделы */
         for ($i = 0; $i < count($children); $i++)
         {
-            try
-            {
-                $this->delete($children[$i]['id']);
-            }
-            catch (Eresus_DB_Exception_QueryFailed $e)
-            {
-                $result = false;
-                break;
-            }
+            $this->delete($children[$i]['id']);
         }
 
-        /* Если подразделы успешно удалены, удаляем контент раздела */
-        if ($result)
+        /* Удаляем контент раздела */
+        $section = $this->get($id);
+        $plugins = Eresus_Plugin_Registry::getInstance();
+        $plugin = $plugins->load($section['type']);
+        //TODO https://github.com/Eresus/EresusCMS/issues/29
+        if (false !== $plugin)
         {
-            $section = $this->get($id);
-            if ($plugin = Eresus_CMS::getLegacyKernel()->plugins->load($section['type']))
+            if (method_exists($plugin, 'onSectionDelete'))
             {
-                if (method_exists($plugin, 'onSectionDelete'))
-                {
-                    $plugin->onSectionDelete($id);
-                }
+                $plugin->onSectionDelete($id);
             }
-            Eresus_CMS::getLegacyKernel()->db->delete($this->table, "`id`=$id");
         }
-        return $result;
+        Eresus_CMS::getLegacyKernel()->db->delete($this->table, "`id`=$id");
+        return true; // Оставлено для обратной совместимости
     }
 }
 
