@@ -282,39 +282,6 @@ class TPages
     }
 
     /**
-     * ???
-     * @param int $id
-     * @return void
-     */
-    private function deleteBranch($id)
-    {
-        $item = Eresus_CMS::getLegacyKernel()->db->selectItem('pages', "`id`='".$id."'");
-        if (Eresus_CMS::getLegacyKernel()->plugins->load($item['type']))
-        {
-            if (isset(Eresus_CMS::getLegacyKernel()->plugins->items[$item['type']]->table))
-            {
-                $fields = Eresus_CMS::getLegacyKernel()->db->
-                    fields(Eresus_CMS::getLegacyKernel()->plugins->items[$item['type']]->table['name']);
-                if (in_array('section', $fields))
-                {
-                    Eresus_CMS::getLegacyKernel()->db->
-                        delete(Eresus_CMS::getLegacyKernel()->plugins->items[$item['type']]->table['name'],
-                            "`section`='".$item['id']."'");
-                }
-            }
-        }
-        $items = Eresus_CMS::getLegacyKernel()->db->select('`pages`', "`owner`='".$id."'", '', '`id`');
-        if (count($items))
-        {
-            foreach ($items as $item)
-            {
-                $this->deleteBranch($item['id']);
-            }
-        }
-        Eresus_CMS::getLegacyKernel()->db->delete('pages', "`id`='".$id."'");
-    }
-
-    /**
      * Удаляет страницу
      * @return void
      */
