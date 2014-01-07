@@ -154,7 +154,7 @@ class TSettings
             array('name' => 'url','caption' => admPagesContentURL)
         );
 
-        foreach (Eresus_CMS::getLegacyKernel()->plugins->items as $plugin)
+        foreach (Eresus_Plugin_Registry::getInstance()->getEnabled() as $plugin)
         {
             if ($plugin instanceof ContentPlugin || $plugin instanceof TContentPlugin)
             {
@@ -170,7 +170,9 @@ class TSettings
         $list = $templates->enum();
         $templates = array();
         foreach ($list as $key => $value)
+        {
             $templates []= array('name' => $key, 'caption' => $value);
+        }
 
         $form->setValue('templates', $templates);
         $form->setValue('pageTemplateDefault', option('pageTemplateDefault'));

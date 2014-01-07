@@ -383,8 +383,7 @@ class TClientUI extends Eresus_CMS_Page_Client
         {
             $this->init();
 
-            $legacyKernel = Eresus_Kernel::app()->getLegacyKernel();
-            $plugins = $legacyKernel->plugins;
+            $plugins = Eresus_Plugin_Registry::getInstance();
 
             $response = $plugins->clientRenderContent($request);
             if (!($response instanceof Eresus_HTTP_Response))
@@ -577,7 +576,6 @@ class TClientUI extends Eresus_CMS_Page_Client
     {
         Eresus_Kernel::log(__METHOD__, LOG_DEBUG, '(%s, %d)', $content, $statusCode);
         $legacyKernel = Eresus_Kernel::app()->getLegacyKernel();
-        $plugins = $legacyKernel->plugins;
 
         $html = $content->render();
         if (

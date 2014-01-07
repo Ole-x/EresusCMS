@@ -318,18 +318,16 @@ class TPages
         /*
          * Типы контентов из плагинов
          */
-        if (count(Eresus_CMS::getLegacyKernel()->plugins->items))
+        $plugins = Eresus_Plugin_Registry::getInstance();
+        foreach ($plugins->getEnabled() as $plugin)
         {
-            foreach (Eresus_CMS::getLegacyKernel()->plugins->items as $plugin)
+            if (
+                $plugin instanceof ContentPlugin ||
+                $plugin instanceof TContentPlugin
+            )
             {
-                if (
-                    $plugin instanceof ContentPlugin ||
-                    $plugin instanceof TContentPlugin
-                )
-                {
-                    $result[0][] = $plugin->title;
-                    $result[1][] = $plugin->name;
-                }
+                $result[0][] = $plugin->title;
+                $result[1][] = $plugin->name;
             }
         }
 

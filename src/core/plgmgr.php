@@ -110,6 +110,7 @@ class TPlgMgr
     {
         Eresus_Kernel::log(__METHOD__, LOG_DEBUG, '()');
 
+        $plugins = Eresus_Plugin_Registry::getInstance();
         $files = arg('files');
         if ($files && is_array($files))
         {
@@ -119,7 +120,7 @@ class TPlgMgr
                 {
                     try
                     {
-                        Eresus_CMS::getLegacyKernel()->plugins->install($plugin);
+                        $plugins->install($plugin);
                     }
                     catch (DomainException $e)
                     {
@@ -195,7 +196,7 @@ class TPlgMgr
             }
         }
 
-        $plugins = Eresus_CMS::getLegacyKernel()->plugins;
+        $plugins = Eresus_Plugin_Registry::getInstance();
 
         foreach ($data['plugins'] as &$item)
         {
