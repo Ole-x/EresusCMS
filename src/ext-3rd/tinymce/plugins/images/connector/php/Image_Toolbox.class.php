@@ -63,7 +63,7 @@ if (!defined('IMAGE_TOOLBOX_BLEND_NEGATION'))
 {
     define('IMAGE_TOOLBOX_BLEND_NEGATION', 5);
 }
-if (!defined('IMAGE_TOOLBOX_BLEND_EXCLUTION'))
+if (!defined('IMAGE_TOOLBOX_BLEND_EXCLUSION'))
 {
     define('IMAGE_TOOLBOX_BLEND_EXCLUSION', 6);
 }
@@ -1276,7 +1276,7 @@ class Image_Toolbox
                 $c['blue'] = 255 - abs(255 - $colorrgb1['blue'] - $colorrgb2['blue']);
                 break;
 
-            case IMAGE_TOOLBOX_BLEND_EXCLUTION:
+            case IMAGE_TOOLBOX_BLEND_EXCLUSION:
                 $c['red'] = $colorrgb1['red'] + $colorrgb2['red'] - (($colorrgb1['red'] * $colorrgb2['red']) >> 7);
                 $c['green'] = $colorrgb1['green'] + $colorrgb2['green'] - (($colorrgb1['green'] * $colorrgb2['green']) >> 7);
                 $c['blue'] = $colorrgb1['blue'] + $colorrgb2['blue'] - (($colorrgb1['blue'] * $colorrgb2['blue']) >> 7);
