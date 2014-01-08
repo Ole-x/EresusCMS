@@ -392,20 +392,22 @@ abstract class Eresus_Plugin
     //------------------------------------------------------------------------------
 
     /**
-     * Вставка в таблицу БД
+     * Вставляет запись в таблицу БД
      *
-     * @param string $table          Имя таблицы
-     * @param array  $item           Вставляемый элемент
-     * @param string $key[optional]  Имя ключевого поля. По умолчанию "id"
+     * @param string $table  имя таблицы
+     * @param array  $item   вставляемый элемент
+     * @param string $key    имя ключевого поля, по умолчанию "id"
+     *
+     * @return array
      */
     public function dbInsert($table, $item, $key = 'id')
     {
-        Eresus_CMS::getLegacyKernel()->db->insert($this->__table($table), $item);
-        $result = $this->dbItem($table, Eresus_CMS::getLegacyKernel()->db->getInsertedId(), $key);
+        $db = Eresus_CMS::getLegacyKernel()->db;
+        $db->insert($this->__table($table), $item);
+        $result = $this->dbItem($table, $db->getInsertedId(), $key);
 
         return $result;
     }
-    //------------------------------------------------------------------------------
 
     /**
      * Изменение данных в БД
