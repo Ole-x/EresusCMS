@@ -418,10 +418,10 @@ class MySQL
 			$fields = '*';
 		}
 
-		$q->select($fields)
-			->from($table)
-			->where($condition)
-			->limit(1);
+		$q->select($fields);
+        $q->from($table);
+        $q->where($condition);
+        $q->limit(1);
 
 		$item = $q->fetch();
 
@@ -478,8 +478,8 @@ class MySQL
 		$q = Eresus_DB::getHandler()->createSelectQuery();
 		$e = $q->expr;
 
-		$q->select($q->alias($e->count('*'), 'count'))
-			->from($table);
+		$q->select($q->alias($e->count('*'), 'count'));
+        $q->from($table);
 
 		if ($condition)
 		{

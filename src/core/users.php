@@ -231,7 +231,12 @@ class TUsers
         HTTP::redirect(arg('submitURL'));
     }
 
-    function edit()
+    /**
+     * ???
+     *
+     * @return string
+     */
+    private function edit()
     {
         $item = Eresus_CMS::getLegacyKernel()->db->selectItem('users', "`id`='".arg('id')."'");
         $form = array(
@@ -273,12 +278,18 @@ class TUsers
             'buttons' => array(UserRights($this->access)?'ok':'apply', 'cancel'),
         );
 
-        $result = Eresus_Kernel::app()->getPage()->renderForm($form)."<br />\n".
-            Eresus_Kernel::app()->getPage()->renderForm($pswd);
+        /** @var TAdminUI $page */
+        $page = Eresus_Kernel::app()->getPage();
+        $result = $page->renderForm($form) . "<br />\n" . $page->renderForm($pswd);
         return $result;
     }
 
-    function create()
+    /**
+     * ???
+     *
+     * @return mixed
+     */
+    private function create()
     {
         restoreRequest();
         $form = array(
@@ -305,8 +316,10 @@ class TUsers
             ),
             'buttons'=>array('ok', 'cancel')
         );
-        $result = Eresus_Kernel::app()->getPage()->
-            renderForm($form, Eresus_CMS::getLegacyKernel()->request['arg']);
+
+        /** @var TAdminUI $page */
+        $page = Eresus_Kernel::app()->getPage();
+        $result = $page->renderForm($form, Eresus_CMS::getLegacyKernel()->request['arg']);
         return $result;
     }
 
@@ -411,7 +424,9 @@ class TUsers
                         )
                     )
                 );
-                $result = Eresus_Kernel::app()->getPage()->renderTable($table);
+                /** @var TAdminUI $page */
+                $page = Eresus_Kernel::app()->getPage();
+                $result = $page->renderTable($table);
             }
             return $result;
         }
@@ -420,6 +435,5 @@ class TUsers
             return '';
         }
     }
-    //-----------------------------------------------------------------------------
 }
 

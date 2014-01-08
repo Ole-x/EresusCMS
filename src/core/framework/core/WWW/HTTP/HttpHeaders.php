@@ -67,9 +67,9 @@ class HttpHeaders
 
     /**
      * Get all headers
-     * @return array
+     * @return HttpHeader[]
      */
-    function getAll()
+    public function getAll()
     {
         return $this->headers;
     }

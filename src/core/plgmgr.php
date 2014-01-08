@@ -292,7 +292,9 @@ class TPlgMgr
                         )
                     )
                 );
-                $result = Eresus_Kernel::app()->getPage()->renderTable($table);
+                /** @var TAdminUI $page */
+                $page = Eresus_Kernel::app()->getPage();
+                $result = $page->renderTable($table);
                 break;
         }
         return $result;

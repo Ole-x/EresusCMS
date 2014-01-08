@@ -241,12 +241,12 @@ class TPages
             /* Проверяем, нет ли в разделе назначения раздела с таким же именем */
             $q = Eresus_DB::getHandler()->createSelectQuery();
             $e = $q->expr;
-            $q->select($q->alias($e->count('id'), 'count'))
-                ->from('pages')
-                ->where($e->lAnd(
-                    $e->eq('owner', $q->bindValue($item['owner'], null, PDO::PARAM_INT)),
-                    $e->eq('name', $q->bindValue($item['name']))
-                ));
+            $q->select($q->alias($e->count('id'), 'count'));
+            $q->from('pages');
+            $q->where($e->lAnd(
+                $e->eq('owner', $q->bindValue($item['owner'], null, PDO::PARAM_INT)),
+                $e->eq('name', $q->bindValue($item['name']))
+            ));
             $count = $q->fetch();
             if ($count['count'])
             {
@@ -275,7 +275,9 @@ class TPages
                 ),
                 'buttons' => array('ok', 'cancel'),
             );
-            $result = Eresus_Kernel::app()->getPage()->renderForm($form);
+            /** @var TAdminUI $page */
+            $page = Eresus_Kernel::app()->getPage();
+            $result = $page->renderForm($form);
             return $result;
         }
         return '';
@@ -393,8 +395,9 @@ class TPages
             'buttons' => array('ok', 'cancel'),
         );
 
-        $result = Eresus_Kernel::app()->getPage()->
-            renderForm($form, Eresus_CMS::getLegacyKernel()->request['arg']);
+        /** @var TAdminUI $page */
+        $page = Eresus_Kernel::app()->getPage();
+        $result = $page->renderForm($form, Eresus_CMS::getLegacyKernel()->request['arg']);
         return $result;
     }
 
@@ -464,10 +467,11 @@ class TPages
                 array('type' => 'hidden', 'name' => 'name', 'value' => 'main'));
         }
 
-        $result = Eresus_Kernel::app()->getPage()->renderForm($form, $item);
+        /** @var TAdminUI $page */
+        $page = Eresus_Kernel::app()->getPage();
+        $result = $page->renderForm($form, $item);
         return $result;
     }
-    //-----------------------------------------------------------------------------
 
     /**
      * Отрисовывает подраздел индекса
@@ -529,19 +533,16 @@ class TPages
      */
     function sectionIndex()
     {
+        /** @var TAdminUI $page */
+        $page = Eresus_Kernel::app()->getPage();
         $root = Eresus_CMS::getLegacyKernel()->root.'admin.php?mod=pages&amp;';
         $this->cache['index_controls'] =
-            Eresus_Kernel::app()->getPage()->
-                control('setup', $root.'id=%d').' '.
-            Eresus_Kernel::app()->getPage()->
-                control('position', array($root.'action=up&amp;id=%d',$root.'action=down&amp;id=%d')).
-            ' '.
-            Eresus_Kernel::app()->getPage()->
-                control('add', $root.'action=create&amp;owner=%d').' '.
-            Eresus_Kernel::app()->getPage()->
-                control('move', $root.'action=move&amp;id=%d').' '.
-            Eresus_Kernel::app()->getPage()->
-                control('delete', $root.'action=delete&amp;id=%d');
+            $page->control('setup', $root.'id=%d') . ' ' .
+            $page->control('position',
+                array($root.'action=up&amp;id=%d',$root.'action=down&amp;id=%d')) . ' ' .
+            $page->control('add', $root.'action=create&amp;owner=%d') . ' ' .
+            $page->control('move', $root.'action=move&amp;id=%d') . ' ' .
+            $page->control('delete', $root.'action=delete&amp;id=%d');
         $types = $this->loadContentTypes();
         for ($i=0; $i<count($types[0]); $i++)
         {
@@ -550,13 +551,11 @@ class TPages
         $table = new AdminList;
         $table->setHead(array('text'=>'Раздел', 'align'=>'left'), 'Имя', 'Тип', 'Доступ', '');
         $table->addRow(array(admPagesRoot, '', '', '',
-            array(Eresus_Kernel::app()->getPage()->
-                control('add', $root.'action=create&amp;owner=0'), 'align' => 'center')));
+            array($page->control('add', $root.'action=create&amp;owner=0'), 'align' => 'center')));
         $table->addRows($this->sectionIndexBranch(0, 1));
         $result = $table->render();
         return $result;
     }
-    //-----------------------------------------------------------------------------
 
     /**
      * ???

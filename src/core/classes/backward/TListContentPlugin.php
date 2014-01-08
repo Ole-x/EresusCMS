@@ -249,7 +249,9 @@ class TListContentPlugin extends TContentPlugin
                 {
                     $this->table['condition'] = "`section`='".arg('section', 'int')."'";
                 }
-                $result = Eresus_Kernel::app()->getPage()->renderTable($this->table);
+                /** @var TAdminUI $page */
+                $page = Eresus_Kernel::app()->getPage();
+                $result = $page->renderTable($this->table);
         }
         return $result;
     }
@@ -316,18 +318,20 @@ class TListContentPlugin extends TContentPlugin
         $options['oldordering'] = isset($options['oldordering']) ? $options['oldordering'] : true;
 
         $result = '';
+        /** @var TClientUI $page */
+        $page = Eresus_Kernel::app()->getPage();
         $items = Eresus_CMS::getLegacyKernel()->db->select(
             $this->table['name'],
-            "(`section`='".Eresus_Kernel::app()->getPage()->id."')".
+            "(`section`='" . $page->id . "')".
             (strpos($this->table['sql'], '`active`')!==false?"AND(`active`='1')":''),
             ($this->table['sortDesc'] ? '-' : '+').$this->table['sortMode'],
             '',
             $this->settings['itemsPerPage'],
             $this->table['sortDesc'] && $options['oldordering']
                 ? (
-                ($this->pagesCount-Eresus_Kernel::app()->getPage()->subpage) *
+                ($this->pagesCount - $page->subpage) *
                 $this->settings['itemsPerPage'])
-                : ((Eresus_Kernel::app()->getPage()->subpage-1)*$this->settings['itemsPerPage'])
+                : (($page->subpage-1)*$this->settings['itemsPerPage'])
         );
         if (count($items))
         {
@@ -372,8 +376,10 @@ class TListContentPlugin extends TContentPlugin
      */
     protected function clientRenderPages()
     {
-        $result = Eresus_Kernel::app()->getPage()->
-            pages($this->pagesCount, $this->settings['itemsPerPage'], $this->table['sortDesc']);
+        /** @var TClientUI $page */
+        $page = Eresus_Kernel::app()->getPage();
+        $result = $page->pages($this->pagesCount, $this->settings['itemsPerPage'],
+            $this->table['sortDesc']);
         return $result;
     }
 

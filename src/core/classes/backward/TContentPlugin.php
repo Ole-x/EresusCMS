@@ -64,7 +64,9 @@ class TContentPlugin extends Eresus_Plugin
      */
     public function clientRenderContent()
     {
-        return Eresus_Kernel::app()->getPage()->content;
+        /** @var TClientUI $page */
+        $page = Eresus_Kernel::app()->getPage();
+        return $page->content;
     }
 
     /**
@@ -87,7 +89,9 @@ class TContentPlugin extends Eresus_Plugin
             'buttons' => array('apply', 'reset'),
         );
 
-        $result = Eresus_Kernel::app()->getPage()->renderForm($form, $item);
+        /** @var TAdminUI $page */
+        $page = Eresus_Kernel::app()->getPage();
+        $result = $page->renderForm($form, $item);
         return $result;
     }
 }

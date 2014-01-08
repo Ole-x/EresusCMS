@@ -319,6 +319,7 @@ abstract class Eresus_CMS_Page
     {
         foreach ($this->head['scripts'] as $script)
         {
+            /** @var HtmlScriptElement $script */
             if ($script->getAttribute('src') == $url)
             {
                 return;

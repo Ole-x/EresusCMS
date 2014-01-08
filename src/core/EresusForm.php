@@ -516,13 +516,14 @@ class EresusForm
 		$this->sessionRestore();
 		$this->detectAutoValidate();
 
-		$GLOBALS['page']->linkScripts($GLOBALS['Eresus']->root . 'core/EresusForm.js');
+        /** @var TAdminUI $page */
+        $page = Eresus_Kernel::app()->getPage();
+        $page->linkScripts(Eresus_Kernel::app()->getLegacyKernel()->root . 'core/EresusForm.js');
 
 		$html = $this->parseExtended();
 
 		return $html;
 	}
-	//-----------------------------------------------------------------------------
 
 	/**
 	 * Установить значение переменной
@@ -582,7 +583,7 @@ class EresusForm
 		/*
 		 * Обработка тегов:
 		 * 1. Удаление расширенных атрибутов
-		 * 2. Предовтращение схлопывания пустых тегов
+		 * 2. Предотвращение схлопывания пустых тегов
 		 */
 		$tags = $this->xml->getElementsByTagName('*');
 		$collapsable = array('br', 'hr', 'input');

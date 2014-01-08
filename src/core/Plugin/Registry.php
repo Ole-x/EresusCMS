@@ -190,9 +190,11 @@ class Eresus_Plugin_Registry
 
             if (class_exists($className, false))
             {
-                $this->items[$name] = new $className();
-                $this->items[$name]->install();
-                $item = $this->items[$name]->__item();
+                /** @var Eresus_Plugin $plugin */
+                $plugin = new $className();
+                $this->items[$name] = $plugin;
+                $plugin->install();
+                $item = $plugin->__item();
                 $item['info'] = serialize($info);
                 Eresus_CMS::getLegacyKernel()->db->insert('plugins', $item);
             }
@@ -225,7 +227,9 @@ class Eresus_Plugin_Registry
         }
         if (isset($this->items[$name]))
         {
-            $this->items[$name]->uninstall();
+            /** @var Eresus_Plugin $plugin */
+            $plugin = $this->items[$name];
+            $plugin->uninstall();
         }
         $item = Eresus_CMS::getLegacyKernel()->db->selectItem('plugins', "`name`='".$name."'");
         if (!is_null($item))

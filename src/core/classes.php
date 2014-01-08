@@ -119,17 +119,19 @@ class ContentPlugin extends Eresus_Plugin
      * Отрисовка клиентской части
      *
      * @return  string  Контент
+     *
+     * @throws Eresus_CMS_Exception_NotFound
      */
     public function clientRenderContent()
     {
         /** @var TClientUI $page */
         $page = Eresus_Kernel::app()->getPage();
+        $request = Eresus_CMS::getLegacyKernel()->request;
         /* Если в URL указано что-либо кроме адреса раздела, отправляет ответ 404 */
-        if (Eresus_CMS::getLegacyKernel()->request['file'] ||
-            Eresus_CMS::getLegacyKernel()->request['query'] ||
-            Eresus_Kernel::app()->getPage()->subpage || Eresus_Kernel::app()->getPage()->topic)
+        if ($request['file'] || $request['query'] ||
+            $page->subpage || $page->topic)
         {
-            $page->httpError(404);
+            throw new Eresus_CMS_Exception_NotFound;
         }
 
         return $page->content;
@@ -156,10 +158,11 @@ class ContentPlugin extends Eresus_Plugin
             'buttons' => array('apply', 'reset'),
         );
 
-        $result = Eresus_Kernel::app()->getPage()->renderForm($form, $item);
+        /** @var TAdminUI $page */
+        $page = Eresus_Kernel::app()->getPage();
+        $result = $page->renderForm($form, $item);
         return $result;
     }
-    //------------------------------------------------------------------------------
 }
 
 /**
