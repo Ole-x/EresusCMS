@@ -25,15 +25,15 @@
  */
 
 $GLOBALS['Eresus']->conf['extensions'] = array(
-	// Расширение возможностей форм ввода
-	'forms' => array(
-		// Расширение полей типа memo
-		'memo_syntax' => array(
-			'editarea' => null,
-		),
-		// Расширение полей типа html
-		'html' => array(
-			'tinymce' => null,
-		),
-	),
+    // Расширение возможностей форм ввода
+    'forms' => array(
+        // Расширение полей типа memo
+        'memo_syntax' => array(
+            'editarea' => null,
+        ),
+        // Расширение полей типа html
+        'html' => array(
+            'tinymce' => null,
+        ),
+    ),
 );
