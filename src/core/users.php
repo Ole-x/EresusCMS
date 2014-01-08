@@ -51,7 +51,14 @@ class TUsers
         $this->accounts = new EresusAccounts();
     }
 
-    function checkMail($mail)
+    /**
+     * Проверяет правильность адреса e-mail
+     *
+     * @param string $mail  адрес e-mail
+     *
+     * @return bool
+     */
+    private function checkMail($mail)
     {
         $host = substr($mail, strpos($mail, '@')+1);
         $ip = gethostbyname($host);
@@ -257,9 +264,9 @@ class TUsers
                     'value'=>$item['active'], 'access'=>ADMIN),
                 array('type'=>'edit','name'=>'loginErrors','label'=>admUsersLoginErrors,'maxlength'=>2,
                     'width'=>'30px','value'=>$item['loginErrors'], 'access'=>ADMIN),
-                array('type'=>'edit','name'=>'mail','label'=>admUsersMail,'maxlength'=>32,'width'=>'100%',
-                    'value'=>$item['mail'], 'pattern'=>'/^[\w]+[\w\d_\.\-]+@[\w\d\-]{2,}\.[a-z]{2,5}$/i',
-                    'errormsg'=>admUsersMailInvalid, 'access'=>ADMIN),
+                array('type' => 'edit', 'name' => 'mail', 'label' => admUsersMail,
+                    'maxlength' => 32, 'width' => '100%', 'value' => $item['mail'],
+                    'access' => ADMIN),
             ),
             'buttons' => array(UserRights($this->access)?'ok':'', 'apply', 'cancel'),
         );
@@ -312,7 +319,8 @@ class TUsers
                 array('type'=>'password','name'=>'pswd2','label'=>admUsersConfirmation,'maxlength'=>32,
                     'width'=>'100%', 'equal'=>'pswd1', 'errormsg'=>admUsersConfirmInvalid),
                 array('type'=>'divider'),
-                array('type'=>'edit','name'=>'mail','label'=>admUsersMail,'maxlength'=>32,'width'=>'100%'),
+                array('type' => 'edit', 'name' => 'mail' , 'label' => admUsersMail,
+                    'maxlength' => 32, 'width' => '100%'),
             ),
             'buttons'=>array('ok', 'cancel')
         );
