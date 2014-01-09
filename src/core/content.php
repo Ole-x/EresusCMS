@@ -28,13 +28,30 @@
  * @package Eresus
  */
 
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 /**
  * Управление контентом
  *
  * @package Eresus
  */
-class TContent
+class TContent implements ContainerAwareInterface
 {
+    /**
+     * @var ContainerInterface
+     * @since 3.02
+     */
+    private $container;
+
+    /**
+     * @param ContainerInterface $container
+     * @since 3.02
+     */
+    public function setContainer(ContainerInterface $container = null)
+    {
+        $this->container = $container;
+    }
 
     /**
      * Возвращает разметку интерфейса управления контентом текущего раздела
@@ -49,7 +66,8 @@ class TContent
         }
 
         $legacyKernel = Eresus_CMS::getLegacyKernel();
-        $plugins = Eresus_Plugin_Registry::getInstance();
+        /** @var Eresus_Plugin_Registry $plugins */
+        $plugins = $this->container->get('plugins');
         /** @var TAdminUI $page */
         $page = Eresus_Kernel::app()->getPage();
 

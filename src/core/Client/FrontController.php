@@ -59,7 +59,7 @@ class Eresus_Client_FrontController extends Eresus_CMS_FrontController
      */
     protected function createPage()
     {
-        return new TClientUI();
+        return new TClientUI($this->container);
     }
 }
 

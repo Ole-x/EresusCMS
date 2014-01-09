@@ -249,15 +249,6 @@ abstract class WebPage extends Eresus_CMS_Page
     );
 
     /**
-     * Конструктор
-     *
-     * @return WebPage
-     */
-    public function __construct()
-    {
-    }
-
-    /**
      * Строит URL GET-запроса на основе переданных аргументов
      *
      * URL будет состоять из двух частей:

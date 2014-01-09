@@ -40,7 +40,8 @@ class Eresus_ClientUITest extends PHPUnit_Framework_TestCase
      */
     public function testGetTemplateName()
     {
-        $page = new TClientUI();
+        $page = $this->getMockBuilder('TClientUI')->disableOriginalConstructor()
+            ->setMethods(array('none'))->getMock();
         $page->dbItem['template'] = 'foo';
         $this->assertEquals('foo', $page->getTemplateName());
     }

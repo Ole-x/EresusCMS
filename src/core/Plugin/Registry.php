@@ -26,6 +26,9 @@
  * @package Eresus
  */
 
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 /**
  * Реестр модулей расширения
  *
@@ -62,11 +65,13 @@ class Eresus_Plugin_Registry
     public $events = array();
 
     /**
-     * Экземпляр-одиночка
-     * @var Eresus_Plugin_Registry
-     * @since 3.01
+     * Контейнер служб
+     *
+     * @var ContainerInterface
+     *
+     * @since 3.02
      */
-    private static $instance = null;
+    private $container;
 
     /**
      * Возвращает экземпляр-одиночку
@@ -75,18 +80,16 @@ class Eresus_Plugin_Registry
      */
     public static function getInstance()
     {
-        if (null === self::$instance)
-        {
-            self::$instance = new self();
-        }
-        return self::$instance;
+        return Eresus_Kernel::app()->container->get('plugins');
     }
 
     /**
-     * @deprecated с 3.01 используйте {@link getInstance()}
+     * @param ContainerInterface $container
      */
-    public function __construct()
+    public function __construct(ContainerInterface $container)
     {
+        $this->container = $container;
+
         spl_autoload_register(array($this, 'autoload'));
 
         $this->registerBcEventListeners();
@@ -139,6 +142,8 @@ class Eresus_Plugin_Registry
      * @return void
      *
      * @since 2.16
+     * @deprecated с 3.02
+     * @todo сделать приватным
      */
     public function init()
     {
@@ -281,6 +286,7 @@ class Eresus_Plugin_Registry
             return false;
         }
 
+        /** @noinspection PhpIncludeInspection */
         include_once $filename;
         $className = $name;
 
@@ -299,8 +305,13 @@ class Eresus_Plugin_Registry
         }
 
         // Заносим экземпляр в реестр
-        $this->items[$name] = new $className();
+        $plugin = new $className();
+        if ($plugin instanceof ContainerAwareInterface)
+        {
+            $plugin->setContainer($this->container);
+        }
         Eresus_Kernel::log(__METHOD__, LOG_DEBUG, 'Plugin "%s" loaded', $name);
+        $this->items[$name] = $plugin;
 
         return $this->items[$name];
     }

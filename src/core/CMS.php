@@ -26,6 +26,10 @@
  * @package Eresus
  */
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
+
 /**
  * Класс приложения Eresus CMS
  *
@@ -64,6 +68,14 @@ class Eresus_CMS extends Eresus_Application
     private $site;
 
     /**
+     * Контейнер служб
+     * @var ContainerBuilder
+     * @since 3.02
+     * @internal
+     */
+    public $container; // TODO Сделать приватным после удаления Eresus_Plugin_Registry::getInstance
+
+    /**
      * Объект создаваемой страницы
      * @var WebPage
      * @since 3.00
@@ -78,6 +90,14 @@ class Eresus_CMS extends Eresus_Application
     public function __construct()
     {
         parent::__construct();
+
+        $this->container = new ContainerBuilder();
+        $this->container
+            ->register('container', $this->container);
+        $this->container
+            ->register('plugins', 'Eresus_Plugin_Registry')
+            ->addArgument(new Reference('container'));
+
         $this->eventDispatcher = new Eresus_Event_Dispatcher();
     }
 
@@ -105,7 +125,7 @@ class Eresus_CMS extends Eresus_Application
          * @todo Обратная совместимость — удалить
          * @deprecated с 3.01 используйте Eresus_Kernel::app()->getLegacyKernel()
          */
-            $GLOBALS['Eresus'] = new Eresus;
+        $GLOBALS['Eresus'] = new Eresus($this->container);
 
         TemplateSettings::setGlobalValue('cms', $this);
 
@@ -301,11 +321,11 @@ class Eresus_CMS extends Eresus_Application
         {
             if ($request->getDirectory() == '/admin' || $request->getPath() == '/admin.php')
             {
-                $controller = new Eresus_Admin_FrontController($request);
+                $controller = new Eresus_Admin_FrontController($this->container, $request);
             }
             else
             {
-                $controller = new Eresus_Client_FrontController($request);
+                $controller = new Eresus_Client_FrontController($this->container, $request);
             }
             $this->page = $controller->getPage();
             /**

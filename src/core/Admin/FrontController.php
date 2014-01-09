@@ -67,7 +67,7 @@ class Eresus_Admin_FrontController extends Eresus_CMS_FrontController
      */
     protected function createPage()
     {
-        return new TAdminUI();
+        return new TAdminUI($this->container);
     }
 
     /**

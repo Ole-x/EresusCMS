@@ -26,6 +26,8 @@
  * @package Eresus
  */
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 /**
  * Страница, создаваемая CMS
  *
@@ -83,11 +85,32 @@ abstract class Eresus_CMS_Page
     );
 
     /**
+     * Контейнер служб
+     *
+     * @var ContainerInterface
+     *
+     * @since 3.02
+     */
+    protected $container;
+
+    /**
      * Сообщения об ошибках
      * @var array
      * @since 3.01
      */
     private $errorMessages = array();
+
+    /**
+     * Конструктор
+     *
+     * @param ContainerInterface $container
+     *
+     * @since 3.02
+     */
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
 
     /**
      * Магический метод для доступа к свойствам страницы

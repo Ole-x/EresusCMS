@@ -28,6 +28,7 @@
  * @package Eresus
  */
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Тема оформления административного интерфейса
@@ -207,13 +208,14 @@ class TAdminUI extends Eresus_CMS_Page_Admin
 
     /**
      * Конструктор
-     * @return TAdminUI
+     *
+     * @param ContainerInterface $container
      */
-    public function __construct()
+    public function __construct(ContainerInterface $container)
     {
         Eresus_Kernel::log(__METHOD__, LOG_DEBUG, '()');
 
-        parent::__construct();
+        parent::__construct($container);
 
         $theme = new AdminUITheme();
         $this->setUITheme($theme);
@@ -993,7 +995,9 @@ class TAdminUI extends Eresus_CMS_Page_Admin
             if (substr($module, 0, 4) == 'ext-')
             {
                 $name = substr($module, 4);
-                $plugin = Eresus_Plugin_Registry::getInstance()->load($name);
+                /** @var Eresus_Plugin_Registry $plugins */
+                $plugins = $this->container->get('plugins');
+                $plugin = $plugins->load($name);
                 if (false === $plugin)
                 {
                     throw new Eresus_HTTP_Exception_NotFound();

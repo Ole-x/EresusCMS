@@ -383,7 +383,8 @@ class TClientUI extends Eresus_CMS_Page_Client
         {
             $this->init();
 
-            $plugins = Eresus_Plugin_Registry::getInstance();
+            /** @var Eresus_Plugin_Registry $plugins */
+            $plugins = $this->container->get('plugins');
 
             $response = $plugins->clientRenderContent($request);
             if (!($response instanceof Eresus_HTTP_Response))

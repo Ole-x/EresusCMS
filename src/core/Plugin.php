@@ -26,12 +26,15 @@
  * @package Eresus
  */
 
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 /**
  * Родительский класс для всех плагинов
  *
  * @package Eresus
  */
-abstract class Eresus_Plugin
+abstract class Eresus_Plugin implements ContainerAwareInterface
 {
     /**
      * Имя плагина
@@ -136,6 +139,15 @@ abstract class Eresus_Plugin
     protected $urlStyle;
 
     /**
+     * Контейнер служб
+     *
+     * @var ContainerInterface
+     *
+     * @since 3.02
+     */
+    private $container;
+
+    /**
      * Шаблоны плагина
      * @var Eresus_Plugin_Templates
      * @since 3.01
@@ -146,31 +158,14 @@ abstract class Eresus_Plugin
      * Конструктор
      *
      * Производит чтение настроек плагина и подключение языковых файлов
-     *
-     * @uses $locale
-     * @uses FS::isFile
-     * @uses Core::safeInclude
-     * @uses Plugin::resetPlugin
      */
     public function __construct()
     {
         global $locale;
 
+        Eresus_Kernel::log(array(get_class($this), __METHOD__), LOG_DEBUG, 'starting…');
+
         $legacyKernel = Eresus_CMS::getLegacyKernel();
-        $plugins = Eresus_Plugin_Registry::getInstance();
-        if (array_key_exists($this->getName(), $plugins->list))
-        {
-            $info = $plugins->list[$this->getName()];
-            $this->settings = decodeOptions($info['settings'], $this->settings);
-            /*
-             * Если установлена версия плагина отличная от установленной ранее, то необходимо
-             * произвести обновление информации о плагине в БД
-             */
-            if ($this->version != $info['version'])
-            {
-                $this->resetPlugin();
-            }
-        }
         $this->dirData = $legacyKernel->fdata . $this->getName() . '/';
         $this->urlData = $legacyKernel->data . $this->getName() . '/';
         $this->dirCode = $legacyKernel->froot . 'ext/' . $this->getName() . '/';
@@ -184,6 +179,16 @@ abstract class Eresus_Plugin
             /** @noinspection PhpIncludeInspection */
             include_once $filename;
         }
+    }
+
+    /**
+     * @param ContainerInterface $container
+     *
+     * @since 3.02
+     */
+    public function setContainer(ContainerInterface $container = null)
+    {
+        $this->container = $container;
     }
 
     /**
@@ -505,6 +510,20 @@ abstract class Eresus_Plugin
     }
 
     /**
+     * Возвращает службу из контейнера
+     *
+     * @param string $id
+     *
+     * @return object
+     *
+     * @since 3.02
+     */
+    protected function get($id)
+    {
+        return $this->container->get($id);
+    }
+
+    /**
      * Чтение настроек плагина из БД
      *
      * @return bool  Результат выполнения
@@ -555,7 +574,8 @@ abstract class Eresus_Plugin
      */
     protected function listenEvents()
     {
-        $registry = Eresus_Plugin_Registry::getInstance();
+        /** @var Eresus_Plugin_Registry $plugins */
+        $registry = $this->get('plugins');
         for ($i=0; $i < func_num_args(); $i++)
         {
             $event = func_get_arg($i);

@@ -27,6 +27,8 @@
  * @subpackage Tests
  */
 
+use Symfony\Component\DependencyInjection\Container;
+
 require_once __DIR__ . '/../../../bootstrap.php';
 
 /**
@@ -41,7 +43,8 @@ class Eresus_CMS_Page_AdminTest extends PHPUnit_Framework_TestCase
      */
     public function testGetTitle()
     {
-        $page = new Eresus_CMS_Page_Admin;
+        $container = new Container();
+        $page = new Eresus_CMS_Page_Admin($container);
         $this->assertEquals('', $page->getTitle());
     }
 
@@ -50,7 +53,8 @@ class Eresus_CMS_Page_AdminTest extends PHPUnit_Framework_TestCase
      */
     public function testGetDescription()
     {
-        $page = new Eresus_CMS_Page_Admin;
+        $container = new Container();
+        $page = new Eresus_CMS_Page_Admin($container);
         $this->assertEquals('', $page->getDescription());
     }
 
@@ -59,7 +63,8 @@ class Eresus_CMS_Page_AdminTest extends PHPUnit_Framework_TestCase
      */
     public function testGetKeywords()
     {
-        $page = new Eresus_CMS_Page_Admin;
+        $container = new Container();
+        $page = new Eresus_CMS_Page_Admin($container);
         $this->assertEquals('', $page->getKeywords());
     }
 }

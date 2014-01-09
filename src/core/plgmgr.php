@@ -26,18 +26,36 @@
  * @package Eresus
  */
 
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 /**
  * Управление плагинами
  *
  * @package Eresus
  */
-class TPlgMgr
+class TPlgMgr implements ContainerAwareInterface
 {
+    /**
+     * @var ContainerInterface
+     * @since 3.02
+     */
+    private $container;
+
     /**
      * Уровень доступа к модулю
      * @var int
      */
     private $access = ADMIN;
+
+    /**
+     * @param ContainerInterface $container
+     * @since 3.02
+     */
+    public function setContainer(ContainerInterface $container = null)
+    {
+        $this->container = $container;
+    }
 
     /**
      * Включает или отключает плагин
@@ -60,7 +78,8 @@ class TPlgMgr
 
     private function delete()
     {
-        $plugins = Eresus_Plugin_Registry::getInstance();
+        /** @var Eresus_Plugin_Registry $plugins */
+        $plugins = $this->container->get('plugins');
         $plugins->load(arg('delete'));
         $plugins->uninstall(arg('delete'));
         HTTP::redirect(Eresus_Kernel::app()->getPage()->url());
@@ -77,7 +96,9 @@ class TPlgMgr
      */
     private function actionSettings($pluginName)
     {
-        $plugin = Eresus_Plugin_Registry::getInstance()->load($pluginName);
+        /** @var Eresus_Plugin_Registry $plugins */
+        $plugins = $this->container->get('plugins');
+        $plugin = $plugins->load($pluginName);
         if (false === $plugin)
         {
             throw new Eresus_CMS_Exception_NotFound;
@@ -110,7 +131,8 @@ class TPlgMgr
     {
         Eresus_Kernel::log(__METHOD__, LOG_DEBUG, '()');
 
-        $plugins = Eresus_Plugin_Registry::getInstance();
+        /** @var Eresus_Plugin_Registry $plugins */
+        $plugins = $this->container->get('plugins');
         $files = arg('files');
         if ($files && is_array($files))
         {
@@ -196,7 +218,8 @@ class TPlgMgr
             }
         }
 
-        $plugins = Eresus_Plugin_Registry::getInstance();
+        /** @var Eresus_Plugin_Registry $plugins */
+        $plugins = $this->container->get('plugins');
 
         foreach ($data['plugins'] as &$item)
         {
@@ -307,7 +330,9 @@ class TPlgMgr
      */
     public function checkHasSettings($item)
     {
-        $plugin = Eresus_Plugin_Registry::getInstance()->load($item['name']);
+        /** @var Eresus_Plugin_Registry $plugins */
+        $plugins = $this->container->get('plugins');
+        $plugin = $plugins->load($item['name']);
         if (false === $plugin)
         {
             return false;

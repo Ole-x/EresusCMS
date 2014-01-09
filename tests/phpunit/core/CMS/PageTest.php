@@ -41,7 +41,7 @@ class Eresus_CMS_PageTest extends PHPUnit_Framework_TestCase
      */
     public function testMagicGet()
     {
-        $page = $this->getMockBuilder('Eresus_CMS_Page')
+        $page = $this->getMockBuilder('Eresus_CMS_Page')->disableOriginalConstructor()
             ->setMethods(array('getFoo', 'getTitle', 'setTitle', 'getDescription', 'getKeywords'))
             ->getMock();
         $page->expects($this->any())->method('getFoo')->will($this->returnValue('bar'));
@@ -56,7 +56,9 @@ class Eresus_CMS_PageTest extends PHPUnit_Framework_TestCase
      */
     public function testErrorMessages()
     {
-        $page = $this->getMockForAbstractClass('Eresus_CMS_Page');
+        $page = $this->getMockBuilder('Eresus_CMS_Page')->disableOriginalConstructor()
+            ->setMethods(array('getFoo', 'getTitle', 'setTitle', 'getDescription', 'getKeywords'))
+            ->getMock();
         /** @var Eresus_CMS_Page $page */
         $page->addErrorMessage('foo');
         $page->addErrorMessage('bar');

@@ -52,7 +52,8 @@ class WebPageTest extends PHPUnit_Framework_TestCase
             $this->markTestSkipped('PHP 5.3 required');
         }
 
-        $page = $this->getMockForAbstractClass('WebPage');
+        $page = $this->getMockBuilder('WebPage')->disableOriginalConstructor()
+            ->setMethods(array('getTitle', 'setTitle', 'getDescription', 'getKeywords'))->getMock();
         /** @var WebPage $page */
         $page->linkScripts('head.js');
         $page->linkScripts('body.js', 'defer');
@@ -76,7 +77,8 @@ class WebPageTest extends PHPUnit_Framework_TestCase
      */
     public function test_addScripts()
     {
-        $page = $this->getMockForAbstractClass('WebPage');
+        $page = $this->getMockBuilder('WebPage')->disableOriginalConstructor()
+            ->setMethods(array('getTitle', 'setTitle', 'getDescription', 'getKeywords'))->getMock();
         /** @var WebPage $page */
         $page->addScripts('var head;');
         $page->addScripts('var body;', 'body');
@@ -102,7 +104,8 @@ class WebPageTest extends PHPUnit_Framework_TestCase
         $p_head = new ReflectionProperty('WebPage', 'head');
         $p_head->setAccessible(true);
 
-        $page = $this->getMockForAbstractClass('WebPage');
+        $page = $this->getMockBuilder('WebPage')->disableOriginalConstructor()
+            ->setMethods(array('getTitle', 'setTitle', 'getDescription', 'getKeywords'))->getMock();
         /** @var WebPage $page */
         $page->setMetaHeader('foo', 'bar');
 
@@ -120,7 +123,8 @@ class WebPageTest extends PHPUnit_Framework_TestCase
         $p_head = new ReflectionProperty('WebPage', 'head');
         $p_head->setAccessible(true);
 
-        $page = $this->getMockForAbstractClass('WebPage');
+        $page = $this->getMockBuilder('WebPage')->disableOriginalConstructor()
+            ->setMethods(array('getTitle', 'setTitle', 'getDescription', 'getKeywords'))->getMock();
         /** @var WebPage $page */
         $page->setMetaTag('bar', 'foo');
 
@@ -138,7 +142,8 @@ class WebPageTest extends PHPUnit_Framework_TestCase
         $p_head = new ReflectionProperty('WebPage', 'head');
         $p_head->setAccessible(true);
 
-        $page = $this->getMockForAbstractClass('WebPage');
+        $page = $this->getMockBuilder('WebPage')->disableOriginalConstructor()
+            ->setMethods(array('getTitle', 'setTitle', 'getDescription', 'getKeywords'))->getMock();
         /** @var WebPage $page */
         $page->linkStyles('foo', 'bar');
 
@@ -166,7 +171,8 @@ class WebPageTest extends PHPUnit_Framework_TestCase
         $p_head = new ReflectionProperty('WebPage', 'head');
         $p_head->setAccessible(true);
 
-        $page = $this->getMockForAbstractClass('WebPage');
+        $page = $this->getMockBuilder('WebPage')->disableOriginalConstructor()
+            ->setMethods(array('getTitle', 'setTitle', 'getDescription', 'getKeywords'))->getMock();
         /** @var WebPage $page */
         $page->addStyles(' foo', 'bar');
         $head = $p_head->getValue($page);

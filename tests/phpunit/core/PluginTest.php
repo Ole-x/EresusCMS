@@ -37,18 +37,6 @@ require_once __DIR__ . '/../bootstrap.php';
 class Eresus_PluginTest extends Eresus_TestCase
 {
     /**
-     * Подготовка окружения
-     */
-    protected function setUp()
-    {
-        $plugins = $this->getMockBuilder('Eresus_Plugin_Registry')->disableOriginalConstructor()
-            ->setMethods(array('registerBcEventListeners'))->getMock();
-        $plugins->expects($this->any())->method('registerBcEventListeners')
-            ->will($this->returnValue(null));
-        $this->setStaticProperty('Eresus_Plugin_Registry', $plugins);
-    }
-
-    /**
      * Тест метода getName
      * @covers Eresus_Plugin::getName
      */
@@ -139,7 +127,7 @@ class Eresus_PluginTest extends Eresus_TestCase
      */
     public function testTemplates()
     {
-        $legacyKernel = $this->getMock('Eresus');
+        $legacyKernel = $this->getMockBuilder('Eresus')->disableOriginalConstructor()->getMock();
         /** @var Eresus $legacyKernel */
         $legacyKernel->plugins = new stdClass();
         $legacyKernel->plugins->list = array();
