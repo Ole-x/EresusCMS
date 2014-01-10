@@ -129,10 +129,14 @@ spl_autoload_register(
     }
 );
 
-/**
- * Автозагрузчик Composer
- */
-include_once __DIR__ . '/vendor/autoload.php';
+$filename = __DIR__ . '/vendor/autoload.php';
+if (file_exists($filename))
+{
+    /**
+     * Автозагрузчик Composer
+     */
+    include_once $filename;
+}
 
 /**
  * Подключаем Dwoo

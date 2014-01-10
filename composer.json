@@ -16,6 +16,7 @@
     },
     "require":
 	{
+        "mekras/bedoved": "dev-develop",
 		"mekras/botobor" : "0.4.0",
         "components/jquery": "1.10.2",
         "components/jqueryui": "1.10.3",

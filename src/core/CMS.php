@@ -86,44 +86,35 @@ class Eresus_CMS extends Eresus_Application
      *
      * @return int  Код завершения для консольных вызовов
      *
-     * @see EresusApplication#main()
+     * @see EresusApplication::main()
      */
     public function main()
     {
         Eresus_Kernel::log(__METHOD__, LOG_DEBUG, 'starting...');
 
-        try
-        {
-            /* Общая инициализация */
-            $this->checkEnvironment();
-            $this->createFileStructure();
+        /* Общая инициализация */
+        $this->checkEnvironment();
+        $this->createFileStructure();
 
-            /* Подключение старого ядра */
-            Eresus_Kernel::log(__METHOD__, LOG_DEBUG, 'Init legacy kernel');
-            include_once 'kernel-legacy.php';
+        /* Подключение старого ядра */
+        Eresus_Kernel::log(__METHOD__, LOG_DEBUG, 'Init legacy kernel');
+        include_once 'kernel-legacy.php';
 
-            /**
-             * @global Eresus Eresus
-             * @todo Обратная совместимость — удалить
-             * @deprecated с 3.01 используйте Eresus_Kernel::app()->getLegacyKernel()
-             */
+        /**
+         * @global Eresus Eresus
+         * @todo Обратная совместимость — удалить
+         * @deprecated с 3.01 используйте Eresus_Kernel::app()->getLegacyKernel()
+         */
             $GLOBALS['Eresus'] = new Eresus;
 
-            TemplateSettings::setGlobalValue('cms', $this);
+        TemplateSettings::setGlobalValue('cms', $this);
 
-            $this->initConf();
-            $i18n = I18n::getInstance();
-            TemplateSettings::setGlobalValue('i18n', $i18n);
-            Eresus_CMS::getLegacyKernel()->init();
-            TemplateSettings::setGlobalValue('Eresus', Eresus_CMS::getLegacyKernel());
-            $this->runWeb();
-        }
-        catch (Exception $e)
-        {
-            Eresus_Kernel::logException($e);
-            ob_end_clean();
-            $this->fatalError($e, false);
-        }
+        $this->initConf();
+        $i18n = I18n::getInstance();
+        TemplateSettings::setGlobalValue('i18n', $i18n);
+        Eresus_CMS::getLegacyKernel()->init();
+        TemplateSettings::setGlobalValue('Eresus', Eresus_CMS::getLegacyKernel());
+        $this->runWeb();
         return 0;
     }
 
@@ -165,6 +156,7 @@ class Eresus_CMS extends Eresus_Application
      * @return void
      *
      * @since 2.16
+     * @deprecated с 3.02, вбрасывайте исключения
      */
     public function fatalError(/** @noinspection PhpUnusedParameterInspection */
         $error = null, $exit = true)
