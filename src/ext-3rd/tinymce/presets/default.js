@@ -183,7 +183,7 @@ function mceInit(data, textStatus, xhr)
 			"link,unlink,anchor,images,image,hr,charmap,|,"+
 			"tablecontrols,|,"+
 			"cut,copy,paste,pastetext,pasteword,|,"+
-			"cleanup,code",
+			"cleanup,code,spellchecker",
 		theme_advanced_buttons3 : "",
 
 		spellchecker_languages : "+Russian=ru,Ukrainian=uk,English=en",
