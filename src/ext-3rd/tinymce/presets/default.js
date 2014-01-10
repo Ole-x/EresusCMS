@@ -138,7 +138,7 @@ function mceInit(data, textStatus, xhr)
 		 *                  delete_table, col_after, col_before, row_after, row_before, split_cells,
 		 *                  merge_cells.
 		 */
-		plugins : "advimage,advlist,fullscreen,images,inlinepopups,paste,safari,table",
+		plugins : "advimage,advlist,fullscreen,images,inlinepopups,paste,safari,table,spellchecker",
 
 		/*
 		 * Тема оформления
@@ -185,6 +185,10 @@ function mceInit(data, textStatus, xhr)
 			"cut,copy,paste,pastetext,pasteword,|,"+
 			"cleanup,code",
 		theme_advanced_buttons3 : "",
+
+		spellchecker_languages : "+Russian=ru,Ukrainian=uk,English=en",
+		spellchecker_rpc_url : Eresus.siteRoot + "/ext-3rd/tinymce/plugins/spellchecker/classes/utils/tinyspell.php",
+		spellchecker_word_separator_chars : '\\s!"#$%&()*+,./:;<=>?@[\]^_{|}\xa7\xa9\xab\xae\xb1\xb6\xb7\xb8\xbb\xbc\xbd\xbe\u00bf\xd7\xf7\xa4\u201d\u201c',
 
 		/****************************************************************************
 		 * Параметры создаваемой разметки
